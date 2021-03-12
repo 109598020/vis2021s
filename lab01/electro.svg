@@ -46,7 +46,71 @@
   <path d="M256 256 V270 V242 M256 256 H270 H242" stroke="black" fill="white"></path>
   <text x="254" y="250" font-size="16" text-anchor="middle" fill="red">(256, 256)</text>
 
+
   <!-- My Write Start -->
+  1<path d="M189 15 A100 100, 0, 0, 0, 170 60" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path> 
+  2<path d="M170 60 A150 15, 0, 0, 0, 230 63" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  3<path d="M230 63 A150 150, 0, 0, 1, 195 123" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  4<path d="M195 123 A0 0, 0, 0, 1, 8 123" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  5<path d="M8 123 A0 0, 0, 0, 1, 8 382" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  6<path d="M8 382 A0 0, 0, 0, 1, 145 382" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  7<path d="M145 382 A300 300, 0, 0, 0, 125 420" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  8<path d="M125 420 A200 100, 0, 0, 0, 80 485" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  9<path d="M80 485 A65 100, 0, 0, 0, 123 473" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  10<path d="M123 473 A37 100, 0, 0, 0, 165 488" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  11<path d="M165 488 A0 0, 0, 0, 0, 225 488" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  12<path d="M225 488 A37 100, 0, 0, 0, 265 470" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  13<path d="M265 470 A65 100, 0, 0, 0, 305 485" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  14<path d="M305 485 A200 100, 0, 0, 0, 271 425" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  15<path d="M271 425 A95 100, 0, 0, 1, 384 429" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  16<path d="M384 429 A75 100, 0, 0, 0, 445 390" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  17<path d="M445 390 A40 100, 0, 0, 0, 470 373" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  18<path d="M470 373 A0 100, 0, 0, 0, 440 359" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  19<path d="M440 359 A10 20, 0, 0, 0, 445 390" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  20<path d="M271 425 A100 100, 0, 0, 1, 245 382" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  21<path d="M245 382 A0 0, 0, 0, 1, 387 382" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  22<path d="M387 382 A0 0, 0, 0, 1, 387 123" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  23<path d="M387 123 A0 0, 0, 0, 1, 195 123" stroke="#F00" stroke-width="5" fill="none" opacity="0.3"></path>
+  
+  <!-- 建立起始點 紅標 -->
+  <text x="189" y="30" font-size="16" text-anchor="middle" fill="red">(189, 15)</text>
+  <circle id="c1" cx="189" cy="15" r="1" stroke="red" fill="none">
+    <animate attributeName="r" to="10" dur="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- 藍點描繪邊框 -->
+  <circle cx="0" cy="0" r="1" stroke="blue" fill="none">
+    <animateMotion dur="6s" path="M189  15 A100 100, 0, 0, 0, 170  60,
+                                  M170  60 A150  15, 0, 0, 0, 230  63,
+                                  M230  63 A150 150, 0, 0, 1, 195 123,
+                                  M195 123   A0   0, 0, 0, 1,   8 123,
+                                  M8   123   A0   0, 0, 0, 1,   8 382,
+                                  M8   382   A0   0, 0, 0, 1, 145 382,
+                                  M145 382 A300 300, 0, 0, 0, 125 420,
+                                  M125 420 A200 100, 0, 0, 0,  80 485,
+                                  M80  485  A65 100, 0, 0, 0, 123 473,
+                                  M123 473  A37 100, 0, 0, 0, 165 488,
+                                  M165 488   A0   0, 0, 0, 0, 225 488,
+                                  M225 488  A37 100, 0, 0, 0, 265 470,
+                                  M265 470  A65 100, 0, 0, 0, 305 485,
+                                  M305 485 A200 100, 0, 0, 0, 271 425,
+                                  M271 425  A95 100, 0, 0, 1, 384 429,
+                                  M384 429  A75 100, 0, 0, 0, 445 390,
+                                  M445 390  A40 100, 0, 0, 0, 470 373,
+                                  M470 373   A0 100, 0, 0, 0, 440 359,
+                                  M440 359  A10  20, 0, 0, 0, 445 390,
+                                  M445 390  A75 100, 0, 0, 1, 384 429,
+                                  M384 429  A95 100, 0, 0, 0, 271 425,
+                                  M271 425 A100 100, 0, 0, 1, 245 382,
+                                  M245 382   A0   0, 0, 0, 1, 387 382,
+                                  M387 382   A0   0, 0, 0, 1, 387 123,
+                                  M387 123   A0   0, 0, 0, 1, 195 123,
+                                  M195 123 A150 150, 0, 0, 0, 230  63,
+                                  M230  63 A150  15, 0, 0, 0, 170  60,
+                                  M170  60 A100 100, 0, 0, 0, 189  15" 
+repeatCount="indefinite" rotate="auto"/>
+    <animate attributeName="r" to="15" dur="6s" repeatCount="indefinite"/>
+  </circle>
 
   <!-- My Write End -->
 </svg>
