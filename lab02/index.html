@@ -94,7 +94,8 @@
 		<div id="treemap"></div>
 		
 		<script type="text/javascript"charset="utf-8">
-            d3.text("./BANG.csv", function(data) {
+		/*
+            d3.text("./11001台北市空氣中TSP和落塵量.csv", function(data) {
                 var parsedCSV = d3.csv.parseRows(data);
 
                 var container = d3.select("body")
@@ -109,6 +110,7 @@
                         .append("td")
                         .text(function(d) { return d; });
             });
+			*/
         </script>
 
 		<script>
@@ -138,7 +140,16 @@
                         treemapContainer.appendChild(node)
                     })
 				})
+				
+				dataLoader('.11001台北市空氣中TSP和落塵量/.csv', function(){
+					dataClassifier(objectKeys.value, function(data, layers){
+						node = getNode(data, layers, treemapContainer)
+						treemapContainer.append(node)
+					})
+				})
+				
 
+				/*
 				document.getElementById('dropfile').addEventListener('dragover',function(evt){
 					evt.preventDefault()
 				})
@@ -176,6 +187,8 @@
 					}
 				})
 			})
+			*/
+			
 		</script>
 
 	</body>
