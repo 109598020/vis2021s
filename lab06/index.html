@@ -1,14 +1,110 @@
 <!DOCTYPE html>
-<html lang="zh-Hant-TW">
-  <head>
-    <meta charset="utf-8">
-    <title>D3 Page Template</title>
-    <script src="http://d3js.org/d3.v6.min.js" charset="utf-8"></script> <!-- v6.5.0 -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>d3.js learning</title>
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <style type="text/css">
+  svg {
+    font: 10px sans-serif;
+    shape-rendering: crispEdges;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+  }
+ 
+  path.domain {
+    stroke: none;
+  }
+ 
+  .y .tick line {
+    stroke: #ddd;
+  }
+  </style>
+
 </head>
 <body>
-    <script type="text/javascript">
-      // Your beautiful D3 code will go here
-    </script>
-  </body>
-</html>
+<script type="text/javascript">
+/*
+var margin = {top: 20, right: 160, bottom: 35, left: 30};
+
+var width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var svg = d3.select("body")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+*/
+/*
+var datas = [{index: "1", chinese: "2", english: "3", french: "4", german: "5", japan: "6"}];
+
+var text = d3.text("dataTest.csv", function(data){
+	var parse =  d3.csv.parseRows(data);
+	parse.forEach( function(item, index){
+		if(index != 0){
+			datas.push({index:index, chinese:item[0], english:item[1], french:item[2], german:item[3], japan:item[4], type1:item[5], type2:item[6]});
+		} 
+	});
+	datas = Object.values(datas);
+});
+
+*/
+/*
+var parse = d3.format('d');
+
+var dataset = d3.layout.stack()(["chinese", "english", "french", "german", "japan", "type1", "type2"].map(function(score) {
+	return datas.map(function(d) {
+		return {x: parse(d.index), y: +d[score]};
+	});
+}));
+
+// Set x, y and colors
+var x = d3.scale.ordinal()
+  .domain(dataset[0].map(function(d) { return d.x; }))
+  .rangeRoundBands([10, width-10], 0.02);
   
+var y = d3.scale.linear()
+  .domain([0, d3.max(dataset, function(d) {  return d3.max(d, function(d) { return d.y0 + d.y; });  })])
+  .range([height, 0]);
+
+var colors = ["#d92f1e", "#ef5b2e", "#efd52e", "#c6f823", "#a6d0f7", "#5089f9", "#e489f9"];
+*/
+/*
+var datas = [];
+datas = d3.csv("dataTest.csv", (error, data) => {
+	if(error){
+		console.log(error);
+	}else{
+		console.log(data);
+		var f = d3.csv.format(data);
+		var parse = d3.csv.parseRows(f);
+		
+		parse.forEach( function(item, num){
+			if(num != 0){
+				datas.push({num: num, a: item[0], b: item[1], c: item[2]});
+			}
+		});
+		return datas = Object.values(datas);
+	}
+})
+console.log(datas.length);
+*/
+/*
+var data = d3.csv.parseRows(f).slice(1).map(function (item, num) {
+	return {num: 1, a: item[0], b: item[1], c: item[2]};
+})
+*/
+d3.csv("dataTest.csv", function(d) {
+	return { num: 1, a: d.Chinese, b: d.English, c: d.Japan };
+}, function(error, rows) {
+  console.log(rows);
+});
+</script>
+</body>
+</html>

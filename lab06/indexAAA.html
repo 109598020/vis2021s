@@ -1,0 +1,208 @@
+<!--
+  https://blockbuilder.org/guilhermesimoes/8913c15adf7dd2cab53a
+  
+  http://bl.ocks.org/mstanaland/6100713
+
+  https://www.d3-graph-gallery.com/graph/barplot_stacked_basicWide.html
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>d3.js learning</title>
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <style type="text/css">
+  svg {
+    font: 10px sans-serif;
+    shape-rendering: crispEdges;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+  }
+ 
+  path.domain {
+    stroke: none;
+  }
+ 
+  .y .tick line {
+    stroke: #ddd;
+  }
+  </style>
+
+</head>
+<body>
+<script type="text/javascript">
+
+// Setup svg using Bostock's margin convention
+
+var margin = {top: 20, right: 160, bottom: 35, left: 30};
+
+var width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var svg = d3.select("body")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+/* Data in strings like it would be if imported from a csv */
+/*
+var datas = [
+	{ index: "1",chinese: "15", english: "14", french: "11",  german: "0", japan: "13", type1: "2", type2: "1"},
+	{ index: "2",chinese: "14", english: "12", french: "12",  german: "0", japan: "13", type1: "1", type2: "1"},
+	{ index: "3",chinese: "15", english: "12", french: "15", german: "10", japan: "14", type1: "2", type2: "0"},
+	{ index: "4",chinese: "15", english: "13", french: "15", german: "13", japan: "13", type1: "1", type2: "0"},
+	{ index: "5",chinese: "14", english: "14", french: "12",  german: "0", japan: "13", type1: "1", type2: "1"}
+];
+*/
+
+var data = [
+	{ num: "1", 國文: "15", 英文: "14", 法文: "11", 德文: "0", 日文: "13", 屬性一: "2", 屬性二: "1"},
+	{ num: "2", 國文: "14", 英文: "12", 法文: "12", 德文: "0", 日文: "13", 屬性一: "1", 屬性二: "1"},
+	{ num: "3", 國文: "15", 英文: "12", 法文: "15", 德文: "10", 日文: "14", 屬性一: "2", 屬性二: "0"},
+	{ num: "4", 國文: "15", 英文: "13", 法文: "15", 德文: "13", 日文: "13", 屬性一: "1", 屬性二: "0"},
+	{ num: "5", 國文: "14", 英文: "14", 法文: "12", 德文: "0", 日文: "13", 屬性一: "1", 屬性二: "1"}
+];
+
+
+var datas = [];
+
+var text = d3.text("dataTest.csv", function(data){
+	var Myparse =  d3.csv.parseRows(data);
+	Myparse.forEach( function(item, index){
+		if(index != 0){
+			datas.push({index:index, chinese:item[0], english:item[1], french:item[2], german:item[3], japan:item[4], type1:item[5], type2:item[6]});
+		} 
+	});
+	datas = Object.values(datas);
+});
+
+var parse = d3.format('d');
+
+var dataset = d3.layout.stack()(["chinese", "english", "french", "german", "japan", "type1", "type2"].map(function(score) {
+	return datas.map(function(d) {
+		return {x: parse(d.index), y: +d[score]};
+	});
+}));
+
+
+
+// Set x, y and colors
+var x = d3.scale.ordinal()
+  .domain(dataset[0].map(function(d) { return d.x; }))
+  .rangeRoundBands([10, width-10], 0.02);
+
+var y = d3.scale.linear()
+  .domain([0, d3.max(dataset, function(d) {  return d3.max(d, function(d) { return d.y0 + d.y; });  })])
+  .range([height, 0]);
+
+var colors = ["#d92f1e", "#ef5b2e", "#efd52e", "#c6f823", "#a6d0f7", "#5089f9", "#e489f9"];
+
+
+// Define and draw axes
+var yAxis = d3.svg.axis()
+  .scale(y)
+  .orient("left")
+  .ticks(5)
+  .tickSize(-width, 0, 0)
+  .tickFormat( function(d) { return d } );
+
+var xAxis = d3.svg.axis()
+  .scale(x)
+  .orient("bottom")
+  .tickFormat(d3.format('d'));
+
+svg.append("g")
+  .attr("class", "y axis")
+  .call(yAxis);
+
+svg.append("g")
+  .attr("class", "x axis")
+  .attr("transform", "translate(0," + height + ")")
+  .call(xAxis);
+
+
+// Create groups for each series, rects for each segment 
+var groups = svg.selectAll("g.cost")
+  .data(dataset)
+  .enter().append("g")
+  .attr("class", "cost")
+  .style("fill", function(d, i) { return colors[i]; });
+
+var rect = groups.selectAll("rect")
+  .data(function(d) { return d; })
+  .enter()
+  .append("rect")
+  .attr("x", function(d) { return x(d.x); })
+  .attr("y", function(d) { return y(d.y0 + d.y); })
+  .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
+  .attr("width", x.rangeBand())
+  .on("mouseover", function() { tooltip.style("display", null); })
+  .on("mouseout", function() { tooltip.style("display", "none"); })
+  .on("mousemove", function(d) {
+    var xPosition = d3.mouse(this)[0] - 15;
+    var yPosition = d3.mouse(this)[1] - 25;
+    tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+    tooltip.select("text").text(d.y);
+  });
+
+
+// Draw legend
+var legend = svg.selectAll(".legend")
+  .data(colors)
+  .enter().append("g")
+  .attr("class", "legend")
+  .attr("transform", function(d, i) { return "translate(30," + i * 19 + ")"; });
+ 
+legend.append("rect")
+  .attr("x", width - 18)
+  .attr("width", 18)
+  .attr("height", 18)
+  .style("fill", function(d, i) {return colors.slice().reverse()[i];});
+ 
+legend.append("text")
+  .attr("x", width + 5)
+  .attr("y", 9)
+  .attr("dy", ".35em")
+  .style("text-anchor", "start")
+  .text(function(d, i) { 
+    switch (i) {
+      case 0: return "attr02";
+      case 1: return "attr01";
+      case 2: return "Japen Score";
+      case 3: return "German Score";
+	  case 4: return "French Score";
+	  case 5: return "English Score";
+	  case 6: return "ChineseS Score";
+    }
+  });
+
+// Prep the tooltip bits, initial display is hidden
+var tooltip = svg.append("g")
+  .attr("class", "tooltip")
+  .style("display", "none");
+    
+tooltip.append("rect")
+  .attr("width", 30)
+  .attr("height", 20)
+  .attr("fill", "white")
+  .style("opacity", 0.5);
+
+tooltip.append("text")
+  .attr("x", 15)
+  .attr("dy", "1.2em")
+  .style("text-anchor", "middle")
+  .attr("font-size", "12px")
+  .attr("font-weight", "bold");
+
+</script>
+</body>
+</html>
+  
