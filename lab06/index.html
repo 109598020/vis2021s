@@ -1,3 +1,11 @@
+<!--
+  https://blockbuilder.org/guilhermesimoes/8913c15adf7dd2cab53a
+  
+  http://bl.ocks.org/mstanaland/6100713
+
+  https://www.d3-graph-gallery.com/graph/barplot_stacked_basicWide.html
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,11 +36,13 @@
 </head>
 <body>
 <script type="text/javascript">
-/*
+
+// Setup svg using Bostock's margin convention
+
 var margin = {top: 20, right: 160, bottom: 35, left: 30};
 
-var width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+var width = 4000 - margin.left - margin.right,
+    height = 1000 - margin.top - margin.bottom;
 
 var svg = d3.select("body")
   .append("svg")
@@ -40,71 +50,135 @@ var svg = d3.select("body")
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-*/
-/*
-var datas = [{index: "1", chinese: "2", english: "3", french: "4", german: "5", japan: "6"}];
 
-var text = d3.text("dataTest.csv", function(data){
-	var parse =  d3.csv.parseRows(data);
-	parse.forEach( function(item, index){
+
+/* Data in strings like it would be if imported from a csv */
+
+var datas = [];
+
+var text = d3.text("dataLab06.csv", function(data){
+	var Myparse =  d3.csv.parseRows(data);
+	Myparse.forEach( function(item, index){
 		if(index != 0){
 			datas.push({index:index, chinese:item[0], english:item[1], french:item[2], german:item[3], japan:item[4], type1:item[5], type2:item[6]});
 		} 
 	});
 	datas = Object.values(datas);
-});
-
-*/
-/*
-var parse = d3.format('d');
-
-var dataset = d3.layout.stack()(["chinese", "english", "french", "german", "japan", "type1", "type2"].map(function(score) {
-	return datas.map(function(d) {
-		return {x: parse(d.index), y: +d[score]};
-	});
-}));
-
-// Set x, y and colors
-var x = d3.scale.ordinal()
-  .domain(dataset[0].map(function(d) { return d.x; }))
-  .rangeRoundBands([10, width-10], 0.02);
-  
-var y = d3.scale.linear()
-  .domain([0, d3.max(dataset, function(d) {  return d3.max(d, function(d) { return d.y0 + d.y; });  })])
-  .range([height, 0]);
-
-var colors = ["#d92f1e", "#ef5b2e", "#efd52e", "#c6f823", "#a6d0f7", "#5089f9", "#e489f9"];
-*/
-/*
-var datas = [];
-datas = d3.csv("dataTest.csv", (error, data) => {
-	if(error){
-		console.log(error);
-	}else{
-		console.log(data);
-		var f = d3.csv.format(data);
-		var parse = d3.csv.parseRows(f);
-		
-		parse.forEach( function(item, num){
-			if(num != 0){
-				datas.push({num: num, a: item[0], b: item[1], c: item[2]});
-			}
+	console.log(datas);
+	var dataset = d3.layout.stack()(["chinese", "english", "french", "german", "japan", "type1", "type2"].map(function(score) {
+		return datas.map(function(d) {
+			return {x: d.index, y: +d[score]};
 		});
-		return datas = Object.values(datas);
-	}
-})
-console.log(datas.length);
-*/
-/*
-var data = d3.csv.parseRows(f).slice(1).map(function (item, num) {
-	return {num: 1, a: item[0], b: item[1], c: item[2]};
-})
-*/
-d3.csv("dataTest.csv", function(d) {
-	return { num: 1, a: d.Chinese, b: d.English, c: d.Japan };
-}, function(error, rows) {
-  console.log(rows);
+	}));
+	
+	var x = d3.scale.ordinal()
+		.domain(dataset[0].map(function(d) { return d.x; }))
+		.rangeRoundBands([10, width-10], 0.02);
+		
+	var y = d3.scale.linear()
+		.domain([0, d3.max(dataset, function(d) {  return d3.max(d, function(d) { return d.y0 + d.y; });  })])
+		.range([height, 0]);
+		
+	// Set x, y and colors
+	var colors = ["#ff0000", "#ef5b2e", "#efd52e", "#c6f823", "#a6d0f7", "#5089f9", "#e489f9"];
+	
+	// Define and draw axes
+	var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient("left")
+		.ticks(5)
+		.tickSize(-width, 0, 0)
+		.tickFormat( function(d) { return d } );
+		
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom");
+		//.tickFormat(d3.format('d'));
+	
+	svg.append("g")
+	  .attr("class", "y axis")
+	  .call(yAxis);
+	  
+	svg.append("g")
+	  .attr("class", "x axis")
+	  .attr("transform", "translate(0," + height + ")")
+	  .call(xAxis);
+	  
+	// Create groups for each series, rects for each segment 
+	var groups = svg.selectAll("g.cost")
+	  .data(dataset)
+	  .enter().append("g")
+	  .attr("class", "cost")
+	  .style("fill", function(d, i) { return colors[i]; });
+	  
+	var rect = groups.selectAll("rect")
+					 .data(function(d) { return d; })
+	                 .enter()
+	                 .append("rect")
+	                 .attr("x", function(d) { return x(d.x); })
+	                 .attr("y", function(d) { return y(d.y0 + d.y); })
+	                 .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
+	                 .attr("width", x.rangeBand())
+	                 .on("mouseover", function() { tooltip.style("display", null); })
+	                 .on("mouseout", function() { 
+						tooltip.style("display", "none"); 
+						d3.select(this).style("filter", "invert(0%)");
+	                 })
+					 .on("mousemove", function(d) {
+						var xPosition = d3.mouse(this)[0] - 15;
+						var yPosition = d3.mouse(this)[1] - 25;
+						d3.select(this).style("filter", "invert(100%)")
+						tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+						tooltip.select("text").text(d.y);
+					 });
+	// Draw legend
+	var legend = svg.selectAll(".legend")
+	  .data(colors)
+	  .enter().append("g")
+	  .attr("class", "legend")
+	  .attr("transform", function(d, i) { return "translate(30," + i * 19 + ")"; });
+	 
+	legend.append("rect")
+	  .attr("x", width - 18)
+	  .attr("width", 18)
+	  .attr("height", 18)
+	  .style("fill", function(d, i) {return colors.slice().reverse()[i];});
+	 
+	legend.append("text")
+	  .attr("x", width + 5)
+	  .attr("y", 9)
+	  .attr("dy", ".35em")
+	  .style("text-anchor", "start")
+	  .text(function(d, i) { 
+		switch (i) {
+		  case 0: return "attr02";
+		  case 1: return "attr01";
+		  case 2: return "Japen Score";
+		  case 3: return "German Score";
+		  case 4: return "French Score";
+		  case 5: return "English Score";
+		  case 6: return "ChineseS Score";
+		}
+	});
+	// Prep the tooltip bits, initial display is hidden
+	var tooltip = svg.append("g")
+		.attr("class", "tooltip")
+		.style("display", "none");
+    
+	tooltip.append("rect")
+		.attr("width", 30)
+		.attr("height", 20)
+		.attr("fill", "white")
+		.style("opacity", 0.5);
+
+	tooltip.append("text")
+		.attr("x", 15)
+		.attr("dy", "1.2em")
+		.style("text-anchor", "middle")
+		.attr("font-size", "12px")
+		.attr("font-weight", "bold");  
 });
 </script>
 </body>
 </html>
+  
