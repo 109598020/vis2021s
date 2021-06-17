@@ -71,12 +71,29 @@
 	<div id="srt"></div>
 
 	<script type="text/javascript">
-		var videoPlayState = -1;// -1 => Replay, 0 => Stop, 1 => Start
-		
+
 		document.getElementById("video").style.display = "none";
 
-		
-	
+		d3.select('body')
+		  .append('svg')
+		  .attr('id', 'replay')
+		  .attr('width', 960)
+		  .attr('height', 540)
+		  .append('text')
+		  .text("Replay")
+		  .attr('x', 540)
+		  .attr('y', 279)
+		  .attr("text-anchor", "middle")
+		  .on('click', function(){
+		  	document.getElementById("video").play();
+		  	document.getElementById("video").style.display = "inline";
+		  	//document.getElementById("subtitle").style.display = "inline";
+		  	//this.style.display = 'none';
+		  	document.getElementById("replay").style.display = "none";
+		  	make_subtitle();
+		  })
+		  ;
+
 		var myarray = [];
 		var key;
 		var begin;
