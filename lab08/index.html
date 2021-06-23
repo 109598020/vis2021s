@@ -81,6 +81,7 @@
 
     <div>
       展示區
+	  <button onClick="btnClick()">restart</button>
       <hr>
       <svg id="firstName" height="450" width="350">
       </svg>
@@ -161,6 +162,10 @@
 			.attr('stroke-width', "2")
 			.attr('d', yuanSVG[i]);
 		}
-    }, 10000);
+    }, 1000);
+	
+	function btnClick(){
+		window.location.reload();
+	}
     </script>
 </html>
