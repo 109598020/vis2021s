@@ -291,14 +291,21 @@
                     .append("p")
                     .text("根據數據的單獨類別進行分類")
                 ;
-
+				
+				d3.select("#testing-section")
+                    .selectAll("p")
+                    .data(d3.range(3))
+                    .enter()
+                    .append("p")
+                    .text("根據數據的單獨類別進行分類")
+                ;
                 d3.select("#testing-section")
                     .selectAll("img")
                     .data(d3.range(3))
                     .enter()
                     .append("img")
-                    .attr("src", function(d){ return "media/__results___7_0.png"})
-                    .style('height', '2800px')
+                    //.attr("src", function(d){ return "media/__results___7_0.png"})
+                    .style('height', '1800px')//2800
                     .style('width', '750px')
                 ;
 
